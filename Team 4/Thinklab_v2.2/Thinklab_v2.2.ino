@@ -55,6 +55,7 @@ void loop() {
 
   // real-time loop -------------------------------------------------------------
   while(realTimeRunStop == true) {        // if OCU-Stop not commanded, run control loop
+    Serial.println(checkOperatorInput());
     if (checkOperatorInput() == 1){
       break;
     }
@@ -63,19 +64,20 @@ void loop() {
 
       // SENSE-THINK-ACT =============================================================================
       // SENSE -------------------------------------------------------------
+      boat.updatePixy();
       /*
       boat.updatesensors()
       update irDataArray
       update pixyDataArray
       */
       // THINK -------------------------------------------------------------
+      boat.arbiter();
       // processData(); // Uses data arrays to update irDecisionArray, pixyDecisionArray
       boat.state = commandState(); // Uses command to update boat state
-      boat.stateController(); // Uses decision arrays and current state to update heading, velocity, state
-      //boat.propellor.writeMicroseconds(2000);
+      boat.stateController(); // Uses decision arrays and current state to run motors
       // ACT ---------------------------------------------------------------
-      // boat.move(); // Uses heading and velocity to move boat
-
+      boat.setPropSpeed(boat.cmd_velocity);
+      boat.setHeading(boat.cmd_heading);
       // END SENSE-THINK-ACT =============================================================================
 
       // Check to see if all code ran successfully in one real-time increment
@@ -85,6 +87,7 @@ void loop() {
     } // end flight code
   } // end real-time loop
 } // end main loop
+
 
 //========================================================================================
 // Functions for flight code
