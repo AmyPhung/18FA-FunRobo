@@ -33,6 +33,8 @@ Output: heading, velocity, state
 
 
 #include "Tugboat.h"
+#include "SenseTarget.h"
+
 
 Tugboat boat;
 
