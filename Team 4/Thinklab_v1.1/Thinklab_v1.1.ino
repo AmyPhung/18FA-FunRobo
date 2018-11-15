@@ -176,6 +176,7 @@ while(realTimeRunStop == true) {      // if OCU-Stop not commanded, run control 
       calculateSpeedBearingcommands();
       //goToBearing(bearingcommand);
       yawRateFunction(yawratecommand);
+      Serial.println(speedcommand);
       setPropSpeed(speedcommand);
 
       Serial.println("Type stop to stop robot");
@@ -407,12 +408,14 @@ void setColor(int red, int green, int blue)
 
 //function to set propellor speed by percentage
 void setPropSpeed(int speedPercentage){
+  Serial.println(speedPercentage);
   int microSec;
   if (speedPercentage>99){          //2000 mm [this is a stand in number]
     microSec= 2000;       //full speed forward
   }
   else if (speedPercentage<=99 && speedPercentage>=0){   //1000 [stand in]
     microSec = map(speedPercentage,0, 100, 1500, 2000); // test speeds of different distances
+    Serial.println(microSec);
   }
   else if (speedPercentage < 0){
     microSec=1000;         //back up slowly from narwhale to prevent running it over

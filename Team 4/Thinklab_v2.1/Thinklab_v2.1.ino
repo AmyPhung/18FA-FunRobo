@@ -54,6 +54,7 @@ const long controlLoopInterval = 1000; //create a name for control loop cycle ti
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
+  boat.setPropSpeed(100);
 }
 //=============================================================================
 // Flight code to run continuously until robot is powered down

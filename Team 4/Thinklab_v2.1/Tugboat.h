@@ -26,7 +26,13 @@ class Tugboat
     float heading;  // Turn in degrees
     float velocity; // Between -1 and 1
 
+    void setPropSpeed(int speedPercentage);
+  
   private:
+    Servo propellor;
+    int propellorPin = 6;
+
+    
     // States
     void stop();
     void idle();

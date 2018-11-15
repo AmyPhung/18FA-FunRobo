@@ -1,9 +1,8 @@
-
+#include "Arduino.h"
+#include "Tugboat.h"
 
 Tugboat::Tugboat()
 {
-  Serial.println("New boat setup!")
-  asdf
   propellor.attach(propellorPin);
 }
 
@@ -33,16 +32,16 @@ void Tugboat::stateController() {
 }
 
 void Tugboat::stop() {
-
+  Tugboat::setPropSpeed(100);
 }
 void Tugboat::idle() {
-
+  Tugboat::setPropSpeed(100);
 }
 void Tugboat::chase() {
-
+  Tugboat::setPropSpeed(100);
 }
 void Tugboat::search() {
-
+  Tugboat::setPropSpeed(100);
 }
 /*
 void processData() { // Takes irDataArray, pixyDataArray as input. Modifies irDecisionArray, pixyDecisionArray
@@ -54,9 +53,8 @@ void arbiter() { // Takes irDecisionArray, pixyDecisionArray, state as input. Mo
 }
 */
 // Act Functions -------------------------------------------------------------
-/*
 //function to set propellor speed by percentage
-void setPropSpeed(int speedPercentage){
+void Tugboat::setPropSpeed(int speedPercentage){
   int microSec;
   if (speedPercentage>99){          //2000 mm [this is a stand in number]
     microSec= 2000;       //full speed forward
@@ -69,10 +67,5 @@ void setPropSpeed(int speedPercentage){
   }
   propellor.writeMicroseconds(microSec);
 }
-*/
-// move(heading, velocity)
-private:
-//Servo propellor;
 
-//int propellorPin = 6;
-};
+// move(heading, velocity)
