@@ -67,7 +67,7 @@ void loop() {
       boat.updateIR(); // Data saved in boat.irDataArray(int [NUM_PTS] defined in Tugboat.h)
       // THINK -------------------------------------------------------------
       boat.arbiter();
-      // processData(); // Uses data arrays to update irDecisionArray, pixyDecisionArray
+      boat.processData(); // Uses data arrays to update irDecisionArray, pixyDecisionArray
       boat.state = commandState(); // Uses command to update boat state
       boat.stateController(); // Uses decision arrays and current state to run motors
       // ACT ---------------------------------------------------------------
