@@ -22,10 +22,8 @@ void SenseIR::init() {
   }
 }
 
-void SenseIR::updateIRData(int distanceValues[]) {
-  
-
-  // read data from each sensor
+void SenseIR::updateIRData(int shiftedDistanceValues[]) {
+    // read data from each sensor
   for (int i = 0; i < irPinSize; i++){
     // read sensor data from specified pin, then insert data directly to 
     // the sensor's heading (which is also the index in irData)
@@ -62,24 +60,17 @@ void SenseIR::updateIRData(int distanceValues[]) {
 //  Serial.println();
 
 
-  // CREATE BETTER DISTANCE ARRAY
+  // create better distance array
   // add interpolation between values
   // for filler headings in our array, interpolate the value from the lower sensor and upper sensor values and headings
+
+    
   for (int currentHeading = 0; currentHeading < irDataSize; currentHeading++){
-    headingHasIR = false; //assume heading doesn't have IR
-//    Serial.print("current heading to check: ");
-//    Serial.print(currentHeading);
-//    Serial.print("\t");
-//    
+
     // check if current heading is in our list of sensor headings
     for (int j = 0; j < irPinSize; j++){
-      if (currentHeading == irHeadings[j]){
-        headingHasIR = true;
-        break;
-      }
-    } 
-
-    if (headingHasIR){ 
+      
+      if (currentHeading == irHeadings[j]){ 
         //if the current heading is in our list of headings with IR
         //dont modify its value, but change our sensor heading frame
         // set current sensor heading to the lowSensorHeading
@@ -87,61 +78,41 @@ void SenseIR::updateIRData(int distanceValues[]) {
         lowSensorHeading = currentHeading;
         lowSensorReading = distanceValues [currentHeading];
         
-//        Serial.print(currentHeading);
-//        Serial.print("\t");
-//        Serial.println("in list");
-        
         // update high sensor heading HARDCODED
-        if (lowSensorHeading = 9) highSensorHeading = 13;
-        else if (lowSensorHeading = 13) highSensorHeading = 18;
-        else if (lowSensorHeading = 18) highSensorHeading = 23;
-        else if (lowSensorHeading = 23) highSensorHeading = 27;
-        else if (lowSensorHeading = 27) highSensorHeading = 9;
+        if (lowSensorHeading = 0) highSensorHeading = 4;
+        else if (lowSensorHeading = 4) highSensorHeading = 9;
+        else if (lowSensorHeading = 9) highSensorHeading = 27;
+        else if (lowSensorHeading = 27) highSensorHeading = 32;
+        else if (lowSensorHeading = 32) highSensorHeading = 0;
   
         highSensorReading = distanceValues [highSensorHeading];
       }
-      else if (currentHeading < 9 or currentHeading > 27){
-        // hardcode to 20, these are headings that we are blind to
-        distanceValues[currentHeading] = 30;
-        
-//        Serial.print(currentHeading);
-//        Serial.print("\t");
-//        Serial.println("blind heading");
-      }
       else {
-        distanceValues[currentHeading] = map(currentHeading, lowSensorHeading, highSensorHeading, lowSensorReading, highSensorReading);
-//        Serial.print(currentHeading);
-//        Serial.print("\t");
-//        Serial.println("mapped heading");
+      distanceValues[currentHeading] = map(currentHeading, lowSensorHeading, highSensorHeading, lowSensorReading, highSensorReading);
       } 
-    
-
-    
-  }  
-
-  // DEBUGGING: PRINT SHIFTED DISTANCE VALUES TO SERIAL
-//  for (int i = 0; i < irDataSize; i++){
-//    if (i > 8 and i < 28){
-//      Serial.print(i);
-//      Serial.print(": ");
-//      Serial.print(shiftedDistanceValues[i]);
-//      Serial.print("\t");
-//    }
-//  }
-//  Serial.println();
-//  Serial.println();
+    } 
+  }
 
 
+  // hardcode values for areas where we are blind 
+  // (headings 10-26 are absolutely blind, but we'll only adjust 11-25)
+  for (int i = 11; i < 26; i++){
+    // set value to 20 cm
+    distanceValues[i] = 20;
+  }
 
-  // send distance array over i2c
-
+  //wrap around the array and center on 0
+  for (int i = 0; i < irDataSize; i++){
+    int shiftIndex = ( i + 17) % irDataSize;
+    shiftedDistanceValues[i] = distanceValues[ shiftIndex ];
+  }
 
   // DEBUGGING: PRINT DISTANCE VALUES TO SERIAL
   for (int i = 0; i < irDataSize; i++){
     if (i > 8 and i < 28){
       Serial.print(i);
       Serial.print(": ");
-      Serial.print(distanceValues[i]);
+      Serial.print(shiftedDistanceValues[i]);
       Serial.print("\t");
     }
   }

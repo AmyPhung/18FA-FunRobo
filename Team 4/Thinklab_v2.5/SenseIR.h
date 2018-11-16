@@ -17,7 +17,7 @@ class SenseIR
     // TODO: Reclassify these as public or private more sensibly, remove hardcode
     // define sensor setups
     int irPins [5] = {0, 1, 2, 3, 4};
-    int irHeadings[5] = {9, 13, 18, 23, 27}; //locations of IR sensors in 10s of degrees
+    int irHeadings[5] = {0, 4, 9, 27, 32}; //locations of IR sensors in 10s of degrees
     int irData[35];
     int distanceValues[35];
     
@@ -31,9 +31,9 @@ class SenseIR
     // type of each IR sensor, in order corresponding to pins and headings
     int irTypes[5] = {1, 1, 1, 1, 1}; //1 = short, 2 = medium, 3 = long
     
-    int lowSensorHeading = irHeadings[0];
+    int lowSensorHeading;
     int lowSensorReading;
-    int highSensorHeading = irHeadings[1];
+    int highSensorHeading;
     int highSensorReading;
     bool headingHasIR; 
 
