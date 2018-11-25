@@ -109,7 +109,7 @@ void SenseIR::updateIRData(int distanceValues[]) {
 //        Serial.println("blind heading");
       }
       else {
-        distanceValues[currentHeading] = map(currentHeading, lowSensorHeading, highSensorHeading, lowSensorReading, highSensorReading);
+        distanceValues[currentHeading] = abs(map(currentHeading, lowSensorHeading, highSensorHeading, lowSensorReading, highSensorReading));
 //        Serial.print(currentHeading);
 //        Serial.print("\t");
 //        Serial.println("mapped heading");
